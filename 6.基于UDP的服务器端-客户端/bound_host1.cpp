@@ -2,6 +2,7 @@
 // Created by starry on 19-3-16.
 //
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,10 +16,10 @@ void error_handling(char *message);
 int main(int argc, char *argv[]) {
     int serv_sock;
     char message[BUF_SIZE];
-    int str_len;
-    socklen_t clnt_addr_sz;
+    int str_len, i;
+    socklen_t addr_sz;
 
-    struct sockaddr_in serv_adr, clnt_adr;
+    struct sockaddr_in my_adr, your_adr;
 
     if(argc != 2) {
         printf("Usage : %s <port>\n",argv[0]);
@@ -28,20 +29,20 @@ int main(int argc, char *argv[]) {
     if(serv_sock == -1)
         error_handling("socket() error");
 
-    memset(&serv_adr, 0, sizeof(serv_adr));
-    serv_adr.sin_family = AF_INET;
-    serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_adr.sin_port = htons(atoi(argv[1]));
+    memset(&my_adr, 0, sizeof(my_adr));
+    my_adr.sin_family = AF_INET;
+    my_adr.sin_addr.s_addr = htonl(INADDR_ANY);
+    my_adr.sin_port = htons(atoi(argv[1]));
 
-    if(bind(serv_sock, (struct sockaddr*) &serv_adr, sizeof(serv_adr)) == -1)
+    if(bind(serv_sock, (struct sockaddr*) &my_adr, sizeof(my_adr)) == -1)
         error_handling("bind() error");
 
-    while (1) {
-        clnt_addr_sz = sizeof(clnt_adr);
+    for(i = 0; i < 3; i ++) {
+        sleep(5);
+        addr_sz = sizeof(your_adr);
         str_len = recvfrom(serv_sock, message, BUF_SIZE, 0,
-                (struct sockaddr*)&clnt_adr, &clnt_addr_sz);
-        sendto(serv_sock, message, str_len, 0,
-               (struct sockaddr*)&clnt_adr, clnt_addr_sz);
+                           (struct sockaddr*)&your_adr, &addr_sz);
+        printf("Message %d: %s \n",i+1, message);
     }
     close(serv_sock);
     return 0;
