@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #define BUF_SIZE 100
-void error_handling(char* message);
+void error_handling(const char* message);
 
 int main(void) {
     int fd;
@@ -25,7 +25,7 @@ int main(void) {
     return 0;
 }
 
-void error_handling(char *message) {
+void error_handling(const char *message) {
     fputs(message, stderr);
     fputc('\n', stderr);
     exit(1);
