@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
 
     printf("Host ordred post:%#x \n",host_port);
     printf("Network ordred post:%#x \n",net_port);
-    printf("Host ordred address:%#x \n",host_addar);
-    printf("Network ordred address:%#x \n",net_addr);
+    printf("Host ordred address:%#lx \n",host_addar);
+    printf("Network ordred address:%#lx \n",net_addr);
 
     return 0;
 }
